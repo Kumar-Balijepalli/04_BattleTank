@@ -9,8 +9,10 @@
 class UTankBarrel;
 class ATank;
 class UTankAimingComponent; // Forward declaration to prevent code duplication and shorten compile times
+class UTankMovementComponent;
 class UTankTurret;
 class AProjectile;
+
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -36,7 +38,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	UTankAimingComponent *TankAimingComponent = nullptr;
-
+	
+	UPROPERTY(BlueprintReadOnly)
+	UTankMovementComponent *TankMovementComponent = nullptr;
 
 
 public:	
