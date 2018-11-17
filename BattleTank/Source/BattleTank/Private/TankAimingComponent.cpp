@@ -46,7 +46,7 @@ void UTankAimingComponent::AimAt(FVector &HitLocation, float LaunchSpeed)
 		false,
 		0.0,
 		0.0,
-		ESuggestProjVelocityTraceOption::DoNotTrace
+		ESuggestProjVelocityTraceOption::TraceFullPath
 	);
 	if(bHaveAimSolution)
 	{
