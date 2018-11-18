@@ -30,7 +30,7 @@ public:
 		virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
 
 
-private:
+public:
 	UTankTrack *LeftTrack = nullptr;
 	UTankTrack *RightTrack = nullptr;
 };
