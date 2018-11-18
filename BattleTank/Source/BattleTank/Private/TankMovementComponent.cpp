@@ -34,12 +34,9 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 	auto ForwardThrow = FVector::DotProduct(TankForward, AIForwardIntention);
 	IntendMoveForward(ForwardThrow);
 
-	//UE_LOG(LogTemp, Warning, TEXT("RequestDirectMove: %s Tank ; MoveVelocity Vector:%s"), *TankName, *MoveVelocityString);
-
 	// For the cross produce the order of the parameters matter. Google Cross product of vectors for explanation.
-	auto TurnThrow = FVector::CrossProduct(TankForward,AIForwardIntention).Z;
+	auto RightThrow = FVector::CrossProduct(TankForward,AIForwardIntention).Z;
 
 	// Need to pass the Z component of TurnThrow vector to decide if we have to turn right or left.
-	IntendTurnRight(TurnThrow);
-
+	IntendTurnRight(RightThrow);
 }
