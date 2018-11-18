@@ -21,7 +21,7 @@ private:
 	//Implement the tick function. Same as all the other tick functions.
 	virtual void Tick(float DeltaTime) override;
 
-	ATank* GetControlledTank() const;
+
 
 	// Start the tank moving the barrel so that a shot would hit where the crosshairs
 	// intersects the world.
@@ -43,5 +43,8 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float LineTraceRange = 1000000.0f;
 
+protected:
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	ATank* GetControlledTank() const;
 	
 };
