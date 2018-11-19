@@ -14,15 +14,10 @@ void ATankPlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
-	if (ensure(AimingComponent))
+	if (ensure(AimingComponent)) // ensure logs out the line number and the error too.
 	{
 		FoundAimingComponent(AimingComponent);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Player controller can't find aiming component at Begin Play"));
-	}
-	
+	}	
 }
 
 void ATankPlayerController::Tick(float DeltaTime)

@@ -47,7 +47,7 @@ public:
 
 	// EditDefaultsOnly because, all tanks must have the same value
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	float LaunchSpeed = 4000.0f; 
+	float LaunchSpeed = 4000.0f;  // TODO Remove once firing is moved to aiming component.
 
 	// Local barrel reference for spawning projectile.
 	UTankBarrel *Barrel = nullptr; // TODO Remove
