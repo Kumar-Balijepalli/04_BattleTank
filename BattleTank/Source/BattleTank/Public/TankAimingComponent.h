@@ -34,11 +34,12 @@ public:
 	UFUNCTION(BlueprintCallable, category = "Setup")
 	void Initialize(UTankBarrel* BarrelToSet, UTankTurret *TurretToSet);
 
-	void AimAt(FVector &HitLocation,float LaunchSpeed);
+	void AimAt(FVector &HitLocation);
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringState FiringState = EFiringState::Aiming;
+
 private:
 	UTankBarrel *Barrel = nullptr;	
 	UTankTurret *Turret = nullptr;
@@ -46,5 +47,7 @@ private:
 	void MoveBarrelTowards(FVector);
 	void MoveTurretTowards(FVector);
 
-	
+	// EditDefaultsOnly because, all tanks must have the same value
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float LaunchSpeed = 4000.0f; 
 };

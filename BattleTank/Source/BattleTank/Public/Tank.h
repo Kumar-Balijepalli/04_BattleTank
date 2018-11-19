@@ -8,7 +8,6 @@
 
 class UTankBarrel;
 class ATank;
-class UTankAimingComponent; // Forward declaration to prevent code duplication and shorten compile times
 class UTankTurret;
 class AProjectile;
 
@@ -28,11 +27,6 @@ public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-protected:
-
-	UPROPERTY(BlueprintReadOnly)
-	UTankAimingComponent *TankAimingComponent = nullptr;
-
 public:	
 
 	void AimAt(FVector HitLocation);
@@ -45,9 +39,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float ReloadTimeInSeconds = 3.0f;
 
-	// EditDefaultsOnly because, all tanks must have the same value
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	float LaunchSpeed = 4000.0f;  // TODO Remove once firing is moved to aiming component.
+
 
 	// Local barrel reference for spawning projectile.
 	UTankBarrel *Barrel = nullptr; // TODO Remove

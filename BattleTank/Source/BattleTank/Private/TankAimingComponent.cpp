@@ -24,7 +24,7 @@ void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * T
 }
 
 // The function that will AimAt some tank. The tank name will need to be passed as a parameter.
-void UTankAimingComponent::AimAt(FVector &HitLocation, float LaunchSpeed)
+void UTankAimingComponent::AimAt(FVector &HitLocation)
 {
 	if (!ensure(Barrel)) { return; }
 

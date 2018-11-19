@@ -2,7 +2,6 @@
 
 #include "TankPlayerController.h"
 #include "Engine/World.h"
-#include "Tank.h"
 #include "GameFramework/Actor.h"
 #include "Public/CollisionQueryParams.h"
 #include "Math/Vector2D.h"
@@ -13,11 +12,11 @@ void ATankPlayerController::BeginPlay()
 	// Always call this before anything else, so that the parent class's BeginPlay is called.
 	Super::BeginPlay();
 
-	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
-	if (ensure(AimingComponent)) // ensure logs out the line number and the error too.
-	{
-		FoundAimingComponent(AimingComponent);
-	}	
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }// ensure logs out the line number and the error too.
+		
+	FoundAimingComponent(AimingComponent);
+		
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
@@ -28,22 +27,16 @@ void ATankPlayerController::Tick(float DeltaTime)
 }
 
 
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	// We want to return the tank we are controlling.
-	// The cast is needed as GetPawn returns only APawn *, and is not specific to which pawn.
-	return Cast<ATank>(GetPawn());
-}
-
 void ATankPlayerController::AimTowardsCrossHair()
 {
-	if (!ensure(GetControlledTank())) { return; }
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
 	
 	FVector HitLocation{ 0 }; // out parameter
 
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		GetControlledTank()->AimAt(HitLocation);
+		AimingComponent->AimAt(HitLocation);
 		
 			// Tell the control tank to aim at this point.
 	}
