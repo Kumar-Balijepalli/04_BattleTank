@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Karna Studios Ltd.
 #include "TankAimingComponent.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
@@ -17,22 +17,16 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel *BarrelToSet)
+void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
 {
-	if (!BarrelToSet) { return; }
 	Barrel = BarrelToSet;
-}
-
-void UTankAimingComponent::SetTurretReference(UTankTurret *TurretToSet)
-{
-	if (!TurretToSet) { return; }
 	Turret = TurretToSet;
 }
 
 // The function that will AimAt some tank. The tank name will need to be passed as a parameter.
 void UTankAimingComponent::AimAt(FVector &HitLocation, float LaunchSpeed)
 {
-	if (Barrel == nullptr) { return; }
+	if (!ensure(Barrel)) { return; }
 
 	FVector OutLaunchVelocity{ 0 };
 	FVector StartLocation = Barrel->GetSocketLocation(FName("BarrelTip"));
@@ -59,8 +53,11 @@ void UTankAimingComponent::AimAt(FVector &HitLocation, float LaunchSpeed)
 	
 }
 
+
+
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 {
+	if (!ensure(Barrel && Turret)) { return; }
 	// Work out difference between current barrel rotation and AimDirection
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
