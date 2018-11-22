@@ -4,8 +4,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
-
-
+#include "Projectile.h"
+#include "ConstructorHelpers.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -14,6 +14,13 @@ UTankAimingComponent::UTankAimingComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
+	// this is required to prevent a bug from showing up where the projectile_BP keeps resetting to None
+	// on every hotload of UE4.
+	static ConstructorHelpers::FClassFinder<AProjectile> Proj(TEXT("/Game/Tank/Projectile_BP"));
+	if (Proj.Class)
+	{
+		ProjectileBlueprint = Proj.Class; 
+	}
 	// ...
 }
 
@@ -44,6 +51,7 @@ void UTankAimingComponent::AimAt(FVector &HitLocation)
 	);
 	if(bHaveAimSolution)
 	{
+
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
 		MoveTurretTowards(AimDirection);
@@ -71,5 +79,20 @@ void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
 	auto DeltaRotator = AimAsRotator - TurretRotator;
 
 	Turret->Rotate(DeltaRotator.Yaw);
+
+}
+void UTankAimingComponent::Fire()
+{
+	if (!ensure(Barrel && ProjectileBlueprint)) { return; }
+	// Check if we are ready to fire, i.e time elapsed since last fire is more than ReloadTime.
+	bool IsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+	if (IsReloaded)
+	{
+		// spawn the projectile at the socket location on barrel.
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Barrel->GetSocketLocation(FName("Projectile")), Barrel->GetSocketRotation(FName("Projectile")));
+		Projectile->LaunchProjectile(LaunchSpeed);
+		// reset the LastFireTime to current time
+		LastFireTime = FPlatformTime::Seconds();
+	}
 
 }

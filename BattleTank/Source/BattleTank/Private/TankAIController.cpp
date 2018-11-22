@@ -33,7 +33,7 @@ void ATankAIController::Tick(float DeltaTime)
 	AimingComponent->AimAt(PlayerTankLocation);
 		
 	// Fires projectile, but after reload time has elapsed.
-	// ControlledTank->Fire(); TODO Fix firing.
+	AimingComponent->Fire(); //TODO Fix firing.
 	
 	
 }

@@ -2,8 +2,6 @@
 
 
 #include "Tank.h"
-#include "TankBarrel.h"
-#include "Projectile.h"
 
 // Sets default values
 ATank::ATank()
@@ -12,25 +10,11 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 	// UE_LOG(LogTemp, Warning, TEXT("%s DONKEY: %s"), *GetName(), *FString(__FUNCTION__));
 }
-// Called when the game starts or when spawned
-void ATank::BeginPlay()
-{
-	Super::BeginPlay(); // Needed for BP Begin Play to run!
-}
+//// Called when the game starts or when spawned
+//void ATank::BeginPlay()
+//{
+//	Super::BeginPlay(); // Needed for BP Begin Play to run!
+//}
 
-void ATank::Fire()
-{
-	if (!ensure(Barrel)) { return; }
-	// Check if we are ready to fire, i.e time elapsed since last fire is more than ReloadTime.
-	bool IsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-	if (IsReloaded)
-	{
-		// spawn the projectile at the socket location on barrel.
-		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Barrel->GetSocketLocation(FName("Projectile")), Barrel->GetSocketRotation(FName("Projectile")));
-		//Projectile->LaunchProjectile(LaunchSpeed);
-		// reset the LastFireTime to current time
-		LastFireTime = FPlatformTime::Seconds();
-	}
 
-}
 

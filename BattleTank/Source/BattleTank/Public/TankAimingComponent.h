@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "TankBarrel.h"
+#include "Projectile.h"
 #include "TankAimingComponent.generated.h"
 
 // Enum for aiming state
@@ -20,6 +22,7 @@ enum class EFiringState : uint8
 // Forward Declaration
 class UTankBarrel;	
 class UTankTurret;
+class AProjectile;
 
 // Holds Barrel's properties
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -36,6 +39,9 @@ public:
 
 	void AimAt(FVector &HitLocation);
 
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	void Fire();
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringState FiringState = EFiringState::Aiming;
@@ -48,6 +54,16 @@ private:
 	void MoveTurretTowards(FVector);
 
 	// EditDefaultsOnly because, all tanks must have the same value
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 4000.0f; 
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	// This is to prevent the tanks from firing every frame.
+	// Making this EditDefaultsOnly to make all tanks have the same value.
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float ReloadTimeInSeconds = 3.0f;
+
+	double LastFireTime = 0.0;
 };
