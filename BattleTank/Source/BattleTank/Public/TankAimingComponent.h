@@ -57,6 +57,8 @@ private:
 	void MoveBarrelTowards(FVector);
 	void MoveTurretTowards(FVector);
 
+	bool isBarrelMoving();
+
 	// EditDefaultsOnly because, all tanks must have the same value
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 4000.0f; 
@@ -70,4 +72,6 @@ private:
 	float ReloadTimeInSeconds = 3.0f;
 
 	double LastFireTime = 0.0;
+
+	FVector AimDirection;
 };

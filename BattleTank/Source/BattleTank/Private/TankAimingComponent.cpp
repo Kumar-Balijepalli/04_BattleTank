@@ -30,22 +30,37 @@ void UTankAimingComponent::BeginPlay()
 	// Doing it here so that we don't fire as soon as the game starts. AI tanks included.
 	LastFireTime = FPlatformTime::Seconds();
 }
-void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
-{
-	// Check if we are ready to fire, i.e time elapsed since last fire is more than ReloadTime.
-	if ((FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds)
-	{
-		FiringState = EFiringState::Reloading;
-	}
-	// TODO handle aiming and locked states.
-	//UE_LOG(LogTemp, Warning, TEXT("%s : %s"), *GetName(), *FString(__FUNCTION__));
-}
 void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
 {
 	Barrel = BarrelToSet;
 	Turret = TurretToSet;
 }
+void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
+{
+	// Check if we are ready to fire, i.e time elapsed since last fire is more than ReloadTime.
+	if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
+	{
+		FiringState = EFiringState::Reloading;
+	}
+	else if (isBarrelMoving())
+	{
+		FiringState = EFiringState::Aiming;
+	}
+	else
+	{
+		FiringState = EFiringState::Locked;
+	}
+	//UE_LOG(LogTemp, Warning, TEXT("%s : %s"), *GetName(), *FString(__FUNCTION__));
+}
 
+bool UTankAimingComponent::isBarrelMoving()
+{
+	// NOTE:do not compare two floats ever!!
+	// compare the barrel's forward vector to the aimDirection in AimAt method.
+	if (!ensure(Barrel)) { return false; }
+	auto BarrelForward = Barrel->GetForwardVector();
+	return !(AimDirection.Equals(BarrelForward, 0.01f));
+}
 // The function that will AimAt some tank. The tank name will need to be passed as a parameter.
 void UTankAimingComponent::AimAt(FVector &HitLocation)
 {
@@ -68,7 +83,7 @@ void UTankAimingComponent::AimAt(FVector &HitLocation)
 	if(bHaveAimSolution)
 	{
 
-		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
 		MoveTurretTowards(AimDirection);
 
