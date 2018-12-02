@@ -34,8 +34,6 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-	virtual void BeginPlay() override;
-
 	UFUNCTION(BlueprintCallable, category = "Setup")
 	void Initialize(UTankBarrel* BarrelToSet, UTankTurret *TurretToSet);
 
@@ -51,6 +49,8 @@ protected:
 private:
 	UTankBarrel *Barrel = nullptr;
 	UTankTurret *Turret = nullptr;
+
+	virtual void BeginPlay() override;
 
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 

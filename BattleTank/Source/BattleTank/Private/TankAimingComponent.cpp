@@ -26,6 +26,8 @@ UTankAimingComponent::UTankAimingComponent()
 
 void UTankAimingComponent::BeginPlay()
 {
+	// not calling the super causes an ensure to fire in UE editor. 
+	Super::BeginPlay();
 	// reset the LastFireTime to current time
 	// Doing it here so that we don't fire as soon as the game starts. AI tanks included.
 	LastFireTime = FPlatformTime::Seconds();
